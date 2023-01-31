@@ -23,7 +23,7 @@ notes.post('/', (req, res) => {
     const newNote = {
       title,
       text,
-      note_id: uuid(),
+      id: uuid(),
     };
 
     readAndAppend(newNote, './db/db.json');
@@ -38,5 +38,23 @@ notes.post('/', (req, res) => {
     res.json('Error in posting note');
   }
 });
+
+// DELETE route to delete a note
+notes.delete('/:id', (req, res) => {
+  const noteId = req.params.id;
+
+  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+  
+    const filteredNotes = data.filter((note) => id !== noteId);
+
+    writeToFile('./db/db.json', JSON.stringify(filteredNotes), (error) => {
+      if (error) {
+        throw error;
+      }
+      res.json({ message: 'Note deleted successfully' });
+    });
+  });
+
+
 
 module.exports = notes;
