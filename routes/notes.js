@@ -34,7 +34,7 @@ notes.post('/', (req, res) => {
       body: newNote,
     };
 
-    res.json(response);
+    res.json(newNote);
   } else {
     res.json('Error in posting note');
   }
@@ -48,13 +48,16 @@ notes.delete('/:id', (req, res) => {
   console.log(data);
 
     const filteredNotes = data.filter((note) => note.id !== noteId);
-
-    writeToFile('./db/db.json', filteredNotes, (error) => {
+       
+  
+   writeToFile('./db/db.json', filteredNotes, (error) => {
       if (error) {
         throw error;
       }
-      res.json({ message: 'Note deleted successfully' });
     });
+    
+    res.json({ message: 'Note deleted successfully' });
+      return filteredNotes;
   });
 
 
