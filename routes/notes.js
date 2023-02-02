@@ -1,7 +1,7 @@
 const notes = require('express').Router();
 const { readFromFile, readAndAppend, writeToFile } = require('../helpers/fsUtils');
 const uuid = require('../helpers/uuid');
-const data = require('../db/db.json')
+// const data = require('../db/db.json')
 
 // GET Route for retrieving all the notes
 notes.get('/', (req, res) => {
@@ -45,19 +45,18 @@ notes.delete('/:id', (req, res) => {
   const noteId = req.params.id;
 
   
-  console.log(data);
-
-    const filteredNotes = data.filter((note) => note.id !== noteId);
-       
-  
-   writeToFile('./db/db.json', filteredNotes, (error) => {
+  readFromFile('./db/db.json').then((data) => {
+    let notes = JSON.parse(data);
+    const filteredNotes = notes.filter((note) => note.id !== noteId);
+    writeToFile('./db/db.json', filteredNotes, (error) => {
       if (error) {
         throw error;
       }
     });
+  });
+       
     
     res.json({ message: 'Note deleted successfully' });
-      return filteredNotes;
   });
 
 
